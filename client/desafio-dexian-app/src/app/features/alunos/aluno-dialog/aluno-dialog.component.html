@@ -62,8 +62,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancelar</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid || isLoading()">
+  <button mat-button class="cancel-btn" (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button class="submit-btn" (click)="onSubmit()" [disabled]="form.invalid || isLoading()">
     @if (isLoading()) {
       <mat-spinner diameter="20"></mat-spinner>
     } @else {

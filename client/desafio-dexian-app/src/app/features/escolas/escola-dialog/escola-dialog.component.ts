@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -28,7 +28,8 @@ interface DialogData {
     MatProgressSpinnerModule
   ],
   templateUrl: './escola-dialog.component.html',
-  styleUrl: './escola-dialog.component.scss'
+  styleUrl: './escola-dialog.component.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class EscolaDialogComponent {
   private fb = inject(FormBuilder);
