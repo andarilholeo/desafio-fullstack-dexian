@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioDexian.API.Controllers;
 
-[ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class EscolasController : ControllerBase
+public class EscolasController : ApiControllerBase
 {
     private readonly IEscolaService _escolaService;
 
@@ -21,8 +20,8 @@ public class EscolasController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<EscolaDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
     {
-        var escolas = await _escolaService.GetAllAsync();
-        return Ok(escolas);
+        var result = await _escolaService.GetAllAsync();
+        return HandleResult(result);
     }
 
     [HttpGet("{id}")]
@@ -30,22 +29,16 @@ public class EscolasController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
-        var escola = await _escolaService.GetByIdAsync(id);
-
-        if (escola is null)
-        {
-            return NotFound(new { message = "Escola não encontrada" });
-        }
-
-        return Ok(escola);
+        var result = await _escolaService.GetByIdAsync(id);
+        return HandleResult(result);
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(EscolaDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> Create([FromBody] CreateEscolaDto dto)
     {
-        var escola = await _escolaService.CreateAsync(dto);
-        return CreatedAtAction(nameof(GetById), new { id = escola.ICodEscola }, escola);
+        var result = await _escolaService.CreateAsync(dto);
+        return HandleCreatedResult(result, nameof(GetById), new { id = result.Value?.ICodEscola });
     }
 
     [HttpPut("{id}")]
@@ -53,14 +46,8 @@ public class EscolasController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateEscolaDto dto)
     {
-        var escola = await _escolaService.UpdateAsync(id, dto);
-
-        if (escola is null)
-        {
-            return NotFound(new { message = "Escola não encontrada" });
-        }
-
-        return Ok(escola);
+        var result = await _escolaService.UpdateAsync(id, dto);
+        return HandleResult(result);
     }
 
     [HttpDelete("{id}")]
@@ -68,14 +55,8 @@ public class EscolasController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
-        var deleted = await _escolaService.DeleteAsync(id);
-
-        if (!deleted)
-        {
-            return NotFound(new { message = "Escola não encontrada" });
-        }
-
-        return NoContent();
+        var result = await _escolaService.DeleteAsync(id);
+        return HandleResult(result);
     }
 }
 

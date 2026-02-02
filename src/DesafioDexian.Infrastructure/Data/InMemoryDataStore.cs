@@ -20,29 +20,17 @@ public class InMemoryDataStore
     private void SeedData()
     {
         // Seed Escolas
-        Escolas.Add(new Escola { ICodEscola = _nextEscolaId++, SDescricao = "Escola Municipal São Paulo" });
-        Escolas.Add(new Escola { ICodEscola = _nextEscolaId++, SDescricao = "Colégio Estadual Rio de Janeiro" });
+        Escolas.Add(new Escola { ICodEscola = _nextEscolaId++, SDescricao = "Colégio Estadual Teotônio Brandão Vilela" });
 
         // Seed Alunos
         Alunos.Add(new Aluno
         {
             ICodAluno = _nextAlunoId++,
-            SNome = "João Silva",
-            DNascimento = new DateTime(2010, 5, 15),
+            SNome = "Leonardo Santos Silva",
+            DNascimento = new DateTime(1995, 4, 19),
             SCPF = "123.456.789-00",
             SEndereco = "Rua das Flores, 123",
             SCelular = "(11) 99999-1111",
-            ICodEscola = 1
-        });
-
-        Alunos.Add(new Aluno
-        {
-            ICodAluno = _nextAlunoId++,
-            SNome = "Maria Santos",
-            DNascimento = new DateTime(2011, 8, 20),
-            SCPF = "987.654.321-00",
-            SEndereco = "Av. Brasil, 456",
-            SCelular = "(11) 99999-2222",
             ICodEscola = 1
         });
 

@@ -1,5 +1,6 @@
 using DesafioDexian.Application.DTOs;
 using DesafioDexian.Application.Interfaces;
+using DesafioDexian.Domain.Common;
 using DesafioDexian.Domain.Interfaces;
 
 namespace DesafioDexian.Application.Services;
@@ -15,19 +16,19 @@ public class AuthService : IAuthService
         _tokenService = tokenService;
     }
 
-    public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto request)
+    public async Task<Result<LoginResponseDto>> LoginAsync(LoginRequestDto request)
     {
         var usuario = await _usuarioRepository.GetByNomeAsync(request.SNome);
 
         if (usuario is null || usuario.SSenha != request.SSenha)
         {
-            return null;
+            return Result.Failure<LoginResponseDto>("Usuário ou senha inválidos", ResultErrorCode.Unauthorized);
         }
 
         var token = _tokenService.GenerateToken(usuario);
         var expiration = DateTime.UtcNow.AddHours(2);
 
-        return new LoginResponseDto(token, usuario.SNome, expiration);
+        return Result.Success(new LoginResponseDto(token, usuario.SNome, expiration));
     }
 }
 

@@ -1,5 +1,6 @@
 using DesafioDexian.Application.DTOs;
 using DesafioDexian.Application.Interfaces;
+using DesafioDexian.Domain.Common;
 using DesafioDexian.Domain.Entities;
 using DesafioDexian.Domain.Interfaces;
 
@@ -14,19 +15,25 @@ public class EscolaService : IEscolaService
         _escolaRepository = escolaRepository;
     }
 
-    public async Task<IEnumerable<EscolaDto>> GetAllAsync()
+    public async Task<Result<IEnumerable<EscolaDto>>> GetAllAsync()
     {
         var escolas = await _escolaRepository.GetAllAsync();
-        return escolas.Select(MapToDto);
+        return Result.Success(escolas.Select(MapToDto));
     }
 
-    public async Task<EscolaDto?> GetByIdAsync(int id)
+    public async Task<Result<EscolaDto>> GetByIdAsync(int id)
     {
         var escola = await _escolaRepository.GetByIdAsync(id);
-        return escola is null ? null : MapToDto(escola);
+
+        if (escola is null)
+        {
+            return Result.Failure<EscolaDto>("Escola não encontrada", ResultErrorCode.NotFound);
+        }
+
+        return Result.Success(MapToDto(escola));
     }
 
-    public async Task<EscolaDto> CreateAsync(CreateEscolaDto dto)
+    public async Task<Result<EscolaDto>> CreateAsync(CreateEscolaDto dto)
     {
         var escola = new Escola
         {
@@ -34,11 +41,18 @@ public class EscolaService : IEscolaService
         };
 
         var created = await _escolaRepository.CreateAsync(escola);
-        return MapToDto(created);
+        return Result.Success(MapToDto(created));
     }
 
-    public async Task<EscolaDto?> UpdateAsync(int id, UpdateEscolaDto dto)
+    public async Task<Result<EscolaDto>> UpdateAsync(int id, UpdateEscolaDto dto)
     {
+        var existing = await _escolaRepository.GetByIdAsync(id);
+
+        if (existing is null)
+        {
+            return Result.Failure<EscolaDto>("Escola não encontrada", ResultErrorCode.NotFound);
+        }
+
         var escola = new Escola
         {
             ICodEscola = id,
@@ -46,12 +60,20 @@ public class EscolaService : IEscolaService
         };
 
         var updated = await _escolaRepository.UpdateAsync(escola);
-        return updated is null ? null : MapToDto(updated);
+        return Result.Success(MapToDto(updated!));
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<Result> DeleteAsync(int id)
     {
-        return await _escolaRepository.DeleteAsync(id);
+        var existing = await _escolaRepository.GetByIdAsync(id);
+
+        if (existing is null)
+        {
+            return Result.Failure("Escola não encontrada", ResultErrorCode.NotFound);
+        }
+
+        await _escolaRepository.DeleteAsync(id);
+        return Result.Success();
     }
 
     private static EscolaDto MapToDto(Escola escola)

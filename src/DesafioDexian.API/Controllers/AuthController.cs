@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioDexian.API.Controllers;
 
-[ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AuthController : ApiControllerBase
 {
     private readonly IAuthService _authService;
 
@@ -21,13 +20,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
     {
         var result = await _authService.LoginAsync(request);
-
-        if (result is null)
-        {
-            return Unauthorized(new { message = "Usuário ou senha inválidos" });
-        }
-
-        return Ok(result);
+        return HandleResult(result);
     }
 }
 

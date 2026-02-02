@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioDexian.API.Controllers;
 
-[ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class AlunosController : ControllerBase
+public class AlunosController : ApiControllerBase
 {
     private readonly IAlunoService _alunoService;
 
@@ -21,8 +20,8 @@ public class AlunosController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<AlunoDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
     {
-        var alunos = await _alunoService.GetAllAsync();
-        return Ok(alunos);
+        var result = await _alunoService.GetAllAsync();
+        return HandleResult(result);
     }
 
     [HttpGet("{id}")]
@@ -30,30 +29,24 @@ public class AlunosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
-        var aluno = await _alunoService.GetByIdAsync(id);
-
-        if (aluno is null)
-        {
-            return NotFound(new { message = "Aluno não encontrado" });
-        }
-
-        return Ok(aluno);
+        var result = await _alunoService.GetByIdAsync(id);
+        return HandleResult(result);
     }
 
     [HttpGet("escola/{escolaId}")]
     [ProducesResponseType(typeof(IEnumerable<AlunoDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetByEscolaId(int escolaId)
     {
-        var alunos = await _alunoService.GetByEscolaIdAsync(escolaId);
-        return Ok(alunos);
+        var result = await _alunoService.GetByEscolaIdAsync(escolaId);
+        return HandleResult(result);
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(AlunoDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> Create([FromBody] CreateAlunoDto dto)
     {
-        var aluno = await _alunoService.CreateAsync(dto);
-        return CreatedAtAction(nameof(GetById), new { id = aluno.ICodAluno }, aluno);
+        var result = await _alunoService.CreateAsync(dto);
+        return HandleCreatedResult(result, nameof(GetById), new { id = result.Value?.ICodAluno });
     }
 
     [HttpPut("{id}")]
@@ -61,14 +54,8 @@ public class AlunosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateAlunoDto dto)
     {
-        var aluno = await _alunoService.UpdateAsync(id, dto);
-
-        if (aluno is null)
-        {
-            return NotFound(new { message = "Aluno não encontrado" });
-        }
-
-        return Ok(aluno);
+        var result = await _alunoService.UpdateAsync(id, dto);
+        return HandleResult(result);
     }
 
     [HttpDelete("{id}")]
@@ -76,14 +63,8 @@ public class AlunosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
-        var deleted = await _alunoService.DeleteAsync(id);
-
-        if (!deleted)
-        {
-            return NotFound(new { message = "Aluno não encontrado" });
-        }
-
-        return NoContent();
+        var result = await _alunoService.DeleteAsync(id);
+        return HandleResult(result);
     }
 }
 

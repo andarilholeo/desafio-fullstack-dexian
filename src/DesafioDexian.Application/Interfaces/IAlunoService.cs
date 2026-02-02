@@ -1,14 +1,15 @@
 using DesafioDexian.Application.DTOs;
+using DesafioDexian.Domain.Common;
 
 namespace DesafioDexian.Application.Interfaces;
 
 public interface IAlunoService
 {
-    Task<IEnumerable<AlunoDto>> GetAllAsync();
-    Task<AlunoDto?> GetByIdAsync(int id);
-    Task<AlunoDto> CreateAsync(CreateAlunoDto dto);
-    Task<AlunoDto?> UpdateAsync(int id, UpdateAlunoDto dto);
-    Task<bool> DeleteAsync(int id);
-    Task<IEnumerable<AlunoDto>> GetByEscolaIdAsync(int escolaId);
+    Task<Result<IEnumerable<AlunoDto>>> GetAllAsync();
+    Task<Result<AlunoDto>> GetByIdAsync(int id);
+    Task<Result<AlunoDto>> CreateAsync(CreateAlunoDto dto);
+    Task<Result<AlunoDto>> UpdateAsync(int id, UpdateAlunoDto dto);
+    Task<Result> DeleteAsync(int id);
+    Task<Result<IEnumerable<AlunoDto>>> GetByEscolaIdAsync(int escolaId);
 }
 

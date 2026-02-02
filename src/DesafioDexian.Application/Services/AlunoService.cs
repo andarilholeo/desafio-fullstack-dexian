@@ -1,5 +1,6 @@
 using DesafioDexian.Application.DTOs;
 using DesafioDexian.Application.Interfaces;
+using DesafioDexian.Domain.Common;
 using DesafioDexian.Domain.Entities;
 using DesafioDexian.Domain.Interfaces;
 
@@ -14,19 +15,25 @@ public class AlunoService : IAlunoService
         _alunoRepository = alunoRepository;
     }
 
-    public async Task<IEnumerable<AlunoDto>> GetAllAsync()
+    public async Task<Result<IEnumerable<AlunoDto>>> GetAllAsync()
     {
         var alunos = await _alunoRepository.GetAllAsync();
-        return alunos.Select(MapToDto);
+        return Result.Success(alunos.Select(MapToDto));
     }
 
-    public async Task<AlunoDto?> GetByIdAsync(int id)
+    public async Task<Result<AlunoDto>> GetByIdAsync(int id)
     {
         var aluno = await _alunoRepository.GetByIdAsync(id);
-        return aluno is null ? null : MapToDto(aluno);
+
+        if (aluno is null)
+        {
+            return Result.Failure<AlunoDto>("Aluno não encontrado", ResultErrorCode.NotFound);
+        }
+
+        return Result.Success(MapToDto(aluno));
     }
 
-    public async Task<AlunoDto> CreateAsync(CreateAlunoDto dto)
+    public async Task<Result<AlunoDto>> CreateAsync(CreateAlunoDto dto)
     {
         var aluno = new Aluno
         {
@@ -39,11 +46,18 @@ public class AlunoService : IAlunoService
         };
 
         var created = await _alunoRepository.CreateAsync(aluno);
-        return MapToDto(created);
+        return Result.Success(MapToDto(created));
     }
 
-    public async Task<AlunoDto?> UpdateAsync(int id, UpdateAlunoDto dto)
+    public async Task<Result<AlunoDto>> UpdateAsync(int id, UpdateAlunoDto dto)
     {
+        var existing = await _alunoRepository.GetByIdAsync(id);
+
+        if (existing is null)
+        {
+            return Result.Failure<AlunoDto>("Aluno não encontrado", ResultErrorCode.NotFound);
+        }
+
         var aluno = new Aluno
         {
             ICodAluno = id,
@@ -56,18 +70,26 @@ public class AlunoService : IAlunoService
         };
 
         var updated = await _alunoRepository.UpdateAsync(aluno);
-        return updated is null ? null : MapToDto(updated);
+        return Result.Success(MapToDto(updated!));
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<Result> DeleteAsync(int id)
     {
-        return await _alunoRepository.DeleteAsync(id);
+        var existing = await _alunoRepository.GetByIdAsync(id);
+
+        if (existing is null)
+        {
+            return Result.Failure("Aluno não encontrado", ResultErrorCode.NotFound);
+        }
+
+        await _alunoRepository.DeleteAsync(id);
+        return Result.Success();
     }
 
-    public async Task<IEnumerable<AlunoDto>> GetByEscolaIdAsync(int escolaId)
+    public async Task<Result<IEnumerable<AlunoDto>>> GetByEscolaIdAsync(int escolaId)
     {
         var alunos = await _alunoRepository.GetByEscolaIdAsync(escolaId);
-        return alunos.Select(MapToDto);
+        return Result.Success(alunos.Select(MapToDto));
     }
 
     private static AlunoDto MapToDto(Aluno aluno)
