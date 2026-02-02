@@ -26,8 +26,6 @@ Sistema fullstack para gerenciamento de escolas e alunos, desenvolvido como desa
 - **Angular 21** - Framework SPA
 - **Angular Material** - Componentes UI (Material Design 3)
 - **TypeScript** - Linguagem principal
-- **SCSS** - Estilização
-- **RxJS** - Programação reativa
 
 ## 🏗 Arquitetura
 
@@ -169,18 +167,4 @@ cd client/desafio-dexian-app && npm start
 | TESTE | 123 |
 
 > ⚠️ **Nota:** Os dados são armazenados em memória (InMemoryDataStore). Ao reiniciar a API, os dados voltam ao estado inicial.
-
-## 📱 Responsividade
-
-A aplicação é totalmente responsiva:
-
-- **Desktop (> 768px):** Menu lateral fixo com navegação
-- **Mobile (≤ 768px):** Menu dropdown no header, tabelas com scroll horizontal
-
-## 🎨 Design System
-
-- **Cores principais:** Marrom (#8B5A2B) e Bege (#FAF8F5)
-- **Bordas:** Arredondadas (12px)
-- **Botões:** Gradiente com efeito hover
-- **Cards:** Sombra suave com fundo sólido
 
