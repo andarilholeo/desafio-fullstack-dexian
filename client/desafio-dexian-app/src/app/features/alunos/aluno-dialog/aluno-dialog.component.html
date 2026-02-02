@@ -1,0 +1,74 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Editar Aluno' : 'Novo Aluno' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="sNome" placeholder="Nome do aluno">
+      @if (form.get('sNome')?.hasError('required') && form.get('sNome')?.touched) {
+        <mat-error>Nome é obrigatório</mat-error>
+      }
+      @if (form.get('sNome')?.hasError('minlength') && form.get('sNome')?.touched) {
+        <mat-error>Nome deve ter pelo menos 3 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>CPF</mat-label>
+      <input matInput formControlName="sCPF" placeholder="000.000.000-00" mask="000.000.000-00">
+      @if (form.get('sCPF')?.hasError('required') && form.get('sCPF')?.touched) {
+        <mat-error>CPF é obrigatório</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Data de Nascimento</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dNascimento">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      @if (form.get('dNascimento')?.hasError('required') && form.get('dNascimento')?.touched) {
+        <mat-error>Data de nascimento é obrigatória</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Celular</mat-label>
+      <input matInput formControlName="sCelular" placeholder="(00) 00000-0000" mask="(00) 00000-0000">
+      @if (form.get('sCelular')?.hasError('required') && form.get('sCelular')?.touched) {
+        <mat-error>Celular é obrigatório</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Endereço</mat-label>
+      <input matInput formControlName="sEndereco" placeholder="Endereço completo">
+      @if (form.get('sEndereco')?.hasError('required') && form.get('sEndereco')?.touched) {
+        <mat-error>Endereço é obrigatório</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Escola</mat-label>
+      <mat-select formControlName="iCodEscola">
+        @for (escola of escolas; track escola.iCodEscola) {
+          <mat-option [value]="escola.iCodEscola">{{ escola.sDescricao }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('iCodEscola')?.hasError('required') && form.get('iCodEscola')?.touched) {
+        <mat-error>Escola é obrigatória</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid || isLoading()">
+    @if (isLoading()) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      {{ isEditMode ? 'Salvar' : 'Criar' }}
+    }
+  </button>
+</mat-dialog-actions>
+

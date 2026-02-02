@@ -1,0 +1,63 @@
+<div class="layout-container" [class.mobile]="isMobile()" [class.ready]="isReady()">
+  <mat-toolbar color="primary" class="toolbar">
+    <!-- Botão de menu - sempre visível, comportamento muda baseado em mobile -->
+    <button mat-icon-button (click)="isMobile() ? null : toggleSidenav()" [matMenuTriggerFor]="isMobile() ? navMenu : null">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <!-- Menu dropdown para mobile -->
+    <mat-menu #navMenu="matMenu" class="nav-dropdown-menu">
+      <a mat-menu-item routerLink="/alunos">
+        <mat-icon>people</mat-icon>
+        <span>Alunos</span>
+      </a>
+      <a mat-menu-item routerLink="/escolas">
+        <mat-icon>business</mat-icon>
+        <span>Escolas</span>
+      </a>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Sair</span>
+      </button>
+    </mat-menu>
+
+    <span class="app-title">
+      <mat-icon>school</mat-icon>
+      <span class="app-title-text">Sistema de Gestão Escolar</span>
+    </span>
+    <span class="spacer"></span>
+    <span class="user-name">{{ userName }}</span>
+    <button mat-raised-button (click)="logout()" class="logout-btn-header" matTooltip="Sair">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav [opened]="isSidenavOpen() && !isMobile()" mode="side" class="sidenav">
+      <mat-nav-list>
+        <a mat-list-item routerLink="/alunos" routerLinkActive="active">
+          <mat-icon matListItemIcon>people</mat-icon>
+          <span matListItemTitle>Alunos</span>
+        </a>
+        <a mat-list-item routerLink="/escolas" routerLinkActive="active">
+          <mat-icon matListItemIcon>business</mat-icon>
+          <span matListItemTitle>Escolas</span>
+        </a>
+      </mat-nav-list>
+
+      <div class="sidenav-footer">
+        <mat-divider></mat-divider>
+        <button mat-raised-button (click)="logout()" class="logout-btn-sidebar">
+          <mat-icon>logout</mat-icon>
+          Sair
+        </button>
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="content">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+

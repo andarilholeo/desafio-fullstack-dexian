@@ -1,0 +1,89 @@
+<div class="alunos-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>people</mat-icon>
+        Alunos
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="toolbar">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Pesquisar</mat-label>
+          <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" 
+                 placeholder="Buscar por nome ou CPF">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="openDialog()" class="add-btn">
+          <mat-icon>add</mat-icon>
+          Novo Aluno
+        </button>
+      </div>
+
+      @if (isLoading()) {
+        <div class="loading">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+      } @else {
+        @if (filteredAlunos().length === 0) {
+          <div class="empty-state">
+            <mat-icon>inbox</mat-icon>
+            <p>Nenhum aluno encontrado</p>
+          </div>
+        } @else {
+          <div class="table-container">
+            <table mat-table [dataSource]="filteredAlunos()">
+              <ng-container matColumnDef="iCodAluno">
+                <th mat-header-cell *matHeaderCellDef>Código</th>
+                <td mat-cell *matCellDef="let aluno">{{ aluno.iCodAluno }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="sNome">
+                <th mat-header-cell *matHeaderCellDef>Nome</th>
+                <td mat-cell *matCellDef="let aluno">{{ aluno.sNome }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="sCPF">
+                <th mat-header-cell *matHeaderCellDef>CPF</th>
+                <td mat-cell *matCellDef="let aluno">{{ formatCPF(aluno.sCPF) }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="dNascimento">
+                <th mat-header-cell *matHeaderCellDef>Nascimento</th>
+                <td mat-cell *matCellDef="let aluno">{{ formatDate(aluno.dNascimento) }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="sCelular">
+                <th mat-header-cell *matHeaderCellDef>Celular</th>
+                <td mat-cell *matCellDef="let aluno">{{ formatPhone(aluno.sCelular) }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="escola">
+                <th mat-header-cell *matHeaderCellDef>Escola</th>
+                <td mat-cell *matCellDef="let aluno">{{ getEscolaName(aluno.iCodEscola) }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Ações</th>
+                <td mat-cell *matCellDef="let aluno">
+                  <button mat-icon-button color="primary" (click)="openDialog(aluno)" matTooltip="Editar">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="confirmDelete(aluno)" matTooltip="Excluir">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+        }
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
+

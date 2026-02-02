@@ -1,0 +1,16 @@
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 300px;
+  padding-top: 16px;
+
+  .full-width {
+    width: 100%;
+  }
+}
+
+mat-dialog-actions {
+  padding: 16px 0 0 0;
+}
+

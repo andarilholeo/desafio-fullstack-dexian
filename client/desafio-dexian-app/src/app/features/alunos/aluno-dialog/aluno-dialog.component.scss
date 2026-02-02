@@ -1,0 +1,78 @@
+app-aluno-dialog {
+  .dialog-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 350px;
+    padding-top: 16px;
+
+    .full-width {
+      width: 100%;
+
+      .mat-mdc-form-field-infix {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .mat-mdc-form-field-icon-suffix {
+        padding-right: 8px;
+      }
+    }
+  }
+
+  mat-dialog-actions {
+    padding: 16px 0 0 0;
+  }
+}
+
+.mat-datepicker-content {
+  --mat-datepicker-calendar-container-background-color: #FAF8F5;
+  --mat-datepicker-calendar-container-text-color: #333;
+
+  background-color: #FAF8F5 !important;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+  .mat-calendar {
+    background-color: #FAF8F5;
+  }
+
+  .mat-calendar-header {
+    background-color: #FAF8F5;
+  }
+
+  .mat-calendar-content {
+    background-color: #FAF8F5;
+  }
+}
+
+.cdk-overlay-pane {
+  .mat-mdc-select-panel {
+    --mat-select-panel-background-color: #FAF8F5;
+
+    background-color: #FAF8F5 !important;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+    .mat-mdc-option {
+      background-color: #FAF8F5;
+
+      &:hover {
+        background-color: rgba(139, 90, 43, 0.1);
+      }
+
+      &.mat-mdc-option-active {
+        background-color: rgba(139, 90, 43, 0.15);
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  app-aluno-dialog {
+    .dialog-form {
+      min-width: 100%;
+    }
+  }
+}
+

@@ -1,0 +1,62 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <div class="card-header">
+      <div class="logo-container">
+        <mat-icon class="logo-icon">school</mat-icon>
+      </div>
+      <h1 class="title">Sistema de Gestão Escolar</h1>
+      <p class="subtitle">Faça login para continuar</p>
+    </div>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        @if (errorMessage()) {
+          <div class="error-message">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage() }}</span>
+          </div>
+        }
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Usuário</mat-label>
+          <input matInput formControlName="sNome" placeholder="Digite seu usuário" autocomplete="username">
+          <mat-icon matSuffix>person</mat-icon>
+          @if (loginForm.get('sNome')?.hasError('required') && loginForm.get('sNome')?.touched) {
+            <mat-error>Usuário é obrigatório</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Senha</mat-label>
+          <input matInput formControlName="sSenha"
+                 [type]="hidePassword() ? 'password' : 'text'"
+                 placeholder="Digite sua senha"
+                 autocomplete="current-password">
+          <span matSuffix class="password-toggle" (click)="togglePasswordVisibility()">
+            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </span>
+          @if (loginForm.get('sSenha')?.hasError('required') && loginForm.get('sSenha')?.touched) {
+            <mat-error>Senha é obrigatória</mat-error>
+          }
+        </mat-form-field>
+
+        <button mat-raised-button type="submit"
+                class="full-width login-button"
+                [disabled]="loginForm.invalid || isLoading()">
+          @if (isLoading()) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            <span class="button-content">
+              <span>Entrar</span>
+            </span>
+          }
+        </button>
+      </form>
+    </mat-card-content>
+
+    <div class="card-footer">
+      <p class="hint">Credenciais: <strong>TESTE</strong> / <strong>123</strong></p>
+    </div>
+  </mat-card>
+</div>
+
